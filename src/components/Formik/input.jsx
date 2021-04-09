@@ -9,6 +9,7 @@ function Input(props) {
   return (
     <div>
       <label htmlFor={name}>{label}</label>
+      <br />
       <Field id={name} name={name} {...otherProps} />
       <ErrorMessage name={name} component={TextError} />
     </div>

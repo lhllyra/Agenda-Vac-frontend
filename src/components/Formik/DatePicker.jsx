@@ -10,6 +10,7 @@ function DatePicker(props) {
   return (
     <div>
       <label htmlFor={name}>{label}</label>
+      <br />
       <Field name={name}>
         {
               ({ form, field }) => {
@@ -21,7 +22,10 @@ function DatePicker(props) {
                     {...field}
                     {...otherProps}
                     selected={value}
-                    dateformat="dd/MM/yyyy"
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode='select'
+                    dateFormat="dd/MM/yyyy"
                     onChange={(val) => setFieldValue(name, val)}
                   />
                 );

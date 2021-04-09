@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { useHistory } from 'react-router-dom';
 import FormikControl from '../Formik/FormikControl';
 
-function MarcarForm() {
+function MarcarForm(props) {
   const history = useHistory();
 
   const initialValues = {
@@ -20,13 +20,14 @@ function MarcarForm() {
 
   const onSubmit = (values) => {
     console.log('enviado!', values);
+    console.log(props);
     history.push('/agenda');
   };
 
   const validationSchema = yup.object({
     name: yup.string().required('Campo Obrigatório'),
-    email: yup.string().required('Campo Obrigatório'),
-    CPF: yup.string().required('Campo Obrigatório'),
+    email: yup.string().required('Campo Obrigatório').matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, "Verifique o email"),
+    CPF: yup.string().required('Campo Obrigatório').min(11, "Verifique o CPF").max(11, "Verifique o CPF"),
     date: yup.date().required('Campo Obrigatório').nullable(),
   });
 

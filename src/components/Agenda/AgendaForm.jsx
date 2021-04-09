@@ -34,6 +34,7 @@ function AgendaForm() {
               control="date"
               label="Data de atendimento"
               name="date"
+              minDate={new Date()}
             />
             <FormikControl
               control="time"
