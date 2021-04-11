@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import {
@@ -5,6 +6,8 @@ import {
 } from 'formik';
 import * as yup from 'yup';
 import FormikControl from '../Formik/FormikControl';
+import ListView from '../ListView';
+import axios from '../../utils/api';
 
 function AgendaForm() {
   const initialValues = {
@@ -12,8 +15,13 @@ function AgendaForm() {
     time: null,
   };
 
-  const onSubmit = (values) => {
-    console.log('enviado!', values);
+  const onSubmit = async (values) => {
+    console.log('enviado!', values.date);
+    try {
+      await axios.post('/appointments', { date: values.date, time: values.time });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const validationSchema = yup.object({
@@ -21,13 +29,33 @@ function AgendaForm() {
     time: yup.date().required('Campo Obrigatório').nullable(),
   });
 
+  const columns = [
+    {
+      name: 'isDone',
+      value: 'Concluido',
+    },
+    {
+      name: 'date',
+      value: 'Data',
+    },
+    {
+      name: 'time',
+      value: 'Hora',
+    },
+    {
+      name: 'textArea',
+      value: 'Notas de atendimento',
+    },
+  ];
+
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {
+    <>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {
         (formik) => (
           <Form>
             <FormikControl
@@ -45,7 +73,12 @@ function AgendaForm() {
           </Form>
         )
       }
-    </Formik>
+      </Formik>
+      <ListView
+        columns={columns}
+        endpoint="/appointments"
+      />
+    </>
   );
 }
 

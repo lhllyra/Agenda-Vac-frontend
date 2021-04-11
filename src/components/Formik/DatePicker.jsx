@@ -24,8 +24,9 @@ function DatePicker(props) {
                     selected={value}
                     showMonthDropdown
                     showYearDropdown
-                    dropdownMode='select'
+                    dropdownMode="select"
                     dateFormat="dd/MM/yyyy"
+                    utcOffSet="-3"
                     onChange={(val) => setFieldValue(name, val)}
                   />
                 );
