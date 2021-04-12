@@ -17,19 +17,9 @@
     "name": "typicode"
   },
   "users": [
-    {
-      "name": "luis",
-      "CPF": "11840062452",
-      "birthDate": "Mon Apr 07 1997",
-      "id": "11840062452"
-    }
+    
   ],
   "appointments": [
-    {
-      "vacDate": "Tue Aug 17 2021",
-      "vacTime": "4:30:29 PM",
-      "CPF": "11840062452",
-      "id": "17820211630"
-    }
+    
   ]
 }
