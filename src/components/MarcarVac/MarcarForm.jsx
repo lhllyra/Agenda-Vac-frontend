@@ -37,15 +37,6 @@ function MarcarForm() {
     return `${day}${month}${year}${hour}${minutes}`;
   };
 
-  const verifyCPF = async (data, CPF) => {
-    data.map((regCPF) => {
-      if (regCPF !== CPF) {
-        return true;
-      }
-      return false;
-    });
-  };
-
   const onSubmit = async (values) => {
     const id = makeID(values.vacDate, values.vacTime);
 
@@ -56,30 +47,16 @@ function MarcarForm() {
         birthDate: values.birthDate.toDateString(),
         id: values.CPF,
       });
-    } catch (error) {
-      // toast.error('Você já está registrado');
-    }
-
-    try {
       await axios.post('/appointments', {
         vacDate: values.vacDate.toDateString(),
         vacTime: values.vacTime._d.toLocaleTimeString(),
         CPF: [values.CPF],
         id,
       });
+
       toast.success('Marcação realizada com sucesso!');
     } catch (error) {
-      const appointment = await axios.get(`/appointments/${id}`);
-      const CPFArr = appointment.data.CPF;
-      if ((CPFArr.length < 2) && (verifyCPF(CPFArr, values.CPF))) {
-        await axios.put(`/appointments/${id}`, {
-          ...appointment.data,
-          CPF: [values.CPF, ...appointment.data.CPF],
-        });
-        toast.success('Você foi adicionado a marcação');
-      } else {
-        toast.error('Não foi possível adicionar à marcação');
-      }
+      toast.error(error.message);
     }
   };
 

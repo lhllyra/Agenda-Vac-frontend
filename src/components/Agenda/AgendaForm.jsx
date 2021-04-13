@@ -15,10 +15,20 @@ function AgendaForm() {
     time: null,
   };
 
+  const makeID = (date, time) => {
+    const hour = time._d.getHours();
+    const minutes = time._d.getMinutes();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}${month}${year}${hour}${minutes}`;
+  };
+
   const onSubmit = async (values) => {
-    console.log('enviado!', values.date);
+    const id = makeID(values.date, values.time);
+
     try {
-      await axios.post('/appointments', { date: values.date, time: values.time });
+      await axios.get(`/appointments/${id}`);
     } catch (error) {
       console.log(error.message);
     }
@@ -33,6 +43,10 @@ function AgendaForm() {
     {
       name: 'isDone',
       value: 'Concluido',
+    },
+    {
+      name: 'name',
+      value: 'Nome',
     },
     {
       name: 'date',
