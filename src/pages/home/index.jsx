@@ -8,6 +8,7 @@ function index() {
     <Page title="Bem vindo ao agendamento de vacinação da cidade do Recife">
       Selecione o serviço desejado:
       <br />
+      <br />
       <Link to="/marcarVac" className="mr-4">
         <Button>Agendar Vacinação</Button>
       </Link>

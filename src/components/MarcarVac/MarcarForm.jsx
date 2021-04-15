@@ -38,25 +38,29 @@ function MarcarForm() {
   };
 
   const onSubmit = async (values) => {
-    const id = makeID(values.vacDate, values.vacTime);
+    const _id = makeID(values.vacDate, values.vacTime);
 
     try {
-      await axios.post('/users', {
+      await axios.post('/api/user', {
         name: values.name,
         CPF: values.CPF,
-        birthDate: values.birthDate.toDateString(),
-        id: values.CPF,
+        birthDate: values.birthDate.valueOf(),
+        _id: values.CPF,
       });
-      await axios.post('/appointments', {
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+    try {
+      await axios.post('/api/appointment', {
         vacDate: values.vacDate.toDateString(),
         vacTime: values.vacTime._d.toLocaleTimeString(),
+        Age: values.birthDate.valueOf(),
         CPF: [values.CPF],
-        id,
+        _id,
       });
-
-      toast.success('Marcação realizada com sucesso!');
+      toast.success('Marcação criada com sucesso!');
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
     }
   };
 
