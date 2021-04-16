@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-underscore-dangle */
 import React, { useContext } from 'react';
 import { Table } from 'react-bootstrap';
@@ -8,13 +7,13 @@ import { AgendaContext } from '../../pages/agenda/AgendaContextProvider';
 function agendaList() {
   const [agenda, setAgenda] = useContext(AgendaContext);
 
-  // version one, CPF's grouped by date and time
-
   return (
     <Table bordered hover className="todos">
       <thead>
         <tr>
-          <th>CPF do Paciente (Clique para mais opções)</th>
+          <th>
+            CPF do Paciente (Clique para mais opções)
+          </th>
           <th>
             Data e Hora do atendimento
           </th>
@@ -44,82 +43,6 @@ function agendaList() {
       </tbody>
     </Table>
   );
-
-  // version 2: separated CPFs with date and time indications
-
-  // return (
-  //   <Table bordered hover className="todos">
-  //     <thead>
-  //       <tr>
-  //         <th>Status</th>
-  //         <th>Dados do Paciente</th>
-  //         <th>
-  //           Data e Hora do atendimento
-  //         </th>
-  //         <th>Relatório de Atendimento</th>
-  //       </tr>
-  //     </thead>
-  //     <tbody>
-  //       {agenda.map((consultation) => consultation.CPF.map((patient) => (
-
-  //         <tr key={patient}>
-  //           <td>
-  //             <input type="checkbox" />
-  //           </td>
-  //           <td>
-  //             {patient}
-  //           </td>
-  //           <td>
-  //             {consultation.vacTime}
-  //             <br />
-  //             {consultation.vacDate}
-  //           </td>
-  //           <td>
-  //             <textarea />
-  //           </td>
-  //         </tr>
-  //       )))}
-  //     </tbody>
-  //   </Table>
-  // );
-
-  // attempted filtering based on agendaForm
-
-  // return (
-  //   <Table bordered hover className="todos">
-  //     <thead>
-  //       <tr>
-  //         <th>Status</th>
-  //         <th>Dados do Paciente</th>
-  //         <th>
-  //           Data e Hora do atendimento
-  //         </th>
-  //         <th>Relatório de Atendimento</th>
-  //       </tr>
-  //     </thead>
-  //     <tbody>
-  //       {agenda.map((consultation) => consultation.CPF.map((patient) => (
-
-  //         <tr key={patient}>
-  //           <td>
-  //             <input type="checkbox" />
-  //           </td>
-  //           <td>
-  //             {patient}
-  //           </td>
-  //           <td>
-  //             {consultation.vacTime}
-  //             <br />
-  //             {consultation.vacDate}
-  //           </td>
-  //           <td>
-  //             <textarea />
-  //           </td>
-  //         </tr>
-  //       )))}
-  //     </tbody>
-  //   </Table>
-  // );
 }
 
 export default agendaList;
