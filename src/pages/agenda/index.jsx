@@ -1,7 +1,6 @@
 import React from 'react';
 import Page from '../../components/Page';
 import AgendaList from '../../components/Agenda/AgendaList';
-import AgendaContextProvider from './AgendaContextProvider';
 
 function Agenda() {
   return (
@@ -12,8 +11,4 @@ function Agenda() {
   );
 }
 
-export default () => (
-  <AgendaContextProvider>
-    <Agenda />
-  </AgendaContextProvider>
-);
+export default Agenda;

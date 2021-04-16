@@ -44,6 +44,8 @@ function MarcarForm() {
       await axios.post('/api/user', {
         name: values.name,
         CPF: values.CPF,
+        isDone: true,
+        report: 'teste',
         birthDate: values.birthDate.valueOf(),
         _id: values.CPF,
       });
