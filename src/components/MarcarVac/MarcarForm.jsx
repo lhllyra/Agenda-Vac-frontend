@@ -10,15 +10,6 @@ import { toast } from 'react-toastify';
 import FormikControl from '../Formik/FormikControl';
 import axios from '../../utils/api';
 
-/* para o controle do numero de pessoas num dado horario:
-para o controle do numero de pessoas num dado horario, os appointments terao um
-array com dois cpfs no maximo. a partir dai, sera possivel verificar com .length
-quantas pessoas já estão naquele horario. A operacao sera uma verificação de
-existencia de reserva no horario, se não, será dado um post. se houver 1 cpf
-naquele horario, sera feito um post. se houver dois, verificamos quem é o mais jovem
-e damos put nas informações
-*/
-
 function MarcarForm() {
   const initialValues = {
     name: '',
@@ -39,13 +30,12 @@ function MarcarForm() {
 
   const onSubmit = async (values) => {
     const _id = makeID(values.vacDate, values.vacTime);
-
     try {
       await axios.post('/api/user', {
         name: values.name,
         CPF: values.CPF,
-        isDone: true,
-        report: 'teste',
+        isDone: false,
+        report: '',
         birthDate: values.birthDate.valueOf(),
         _id: values.CPF,
       });
@@ -67,7 +57,7 @@ function MarcarForm() {
   };
 
   const validationSchema = yup.object({
-    name: yup.string().required('Campo Obrigatório').matches(/^[A-Za-z]+$/, 'Nome deve conter letras apenas.'),
+    name: yup.string().required('Campo Obrigatório').matches(/^[A-Za-zà-úÀ-Ú ]+$/, 'Nome deve conter letras apenas.'),
     CPF: yup.string().required('Campo Obrigatório').min(11, 'Verifique o CPF').max(11, 'Verifique o CPF')
       .matches(/^[0-9]*$/, 'CPF deve conter números apenas.'),
     birthDate: yup.date().required('Campo Obrigatório').nullable(),
@@ -102,6 +92,7 @@ function MarcarForm() {
               control="date"
               label="Data de Nascimento"
               name="birthDate"
+              maxDate={new Date()}
             />
             <br />
             <FormikControl
@@ -109,15 +100,16 @@ function MarcarForm() {
               label="Data de Vacinação"
               name="vacDate"
               minDate={new Date()}
+              maxDate={new Date(2024, 11, 31)}
             />
             <br />
             <FormikControl
               control="time"
-              label="Hora da vacinação"
+              label="Hora da Vacinação"
               name="vacTime"
             />
             <br />
-            <button type="submit">Enviar</button>
+            <button name="submit" type="submit">Enviar</button>
           </Form>
         )
       }

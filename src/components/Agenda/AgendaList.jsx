@@ -10,9 +10,12 @@ function agendaList() {
   const [agenda = [], setAgenda] = useState([]);
   const [input, setInput] = useState('');
   const [edit, setEdit] = useState({});
+  const [check, setCheck] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const fetchData = async () => {
+  const calcAge = (value) => Math.floor((Date.now() - value) / 31536000000);
+
+  const fetchAgenda = async () => {
     try {
       const response = await axios.get('/api/appointment');
       setAgenda(response.data.data);
@@ -21,14 +24,20 @@ function agendaList() {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const fetchUser = async (CPF) => {
+    try {
+      const patient = await axios.get(`/api/user/${CPF}`);
+      setEdit(patient.data.data);
+      setInput(patient.data.data?.report);
+      setCheck(patient.data.data?.isDone);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
 
   const onEdit = async (CPF, report) => {
     try {
-      const patient = await axios.get(`/api/user/${CPF}`);
-      await axios.put(`/api/user/${CPF}`, { ...patient.data.data, report });
+      await axios.put(`/api/user/${CPF}`, { ...edit, report });
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -36,29 +45,25 @@ function agendaList() {
     setInput('');
   };
 
-  const handleEdit = async (CPF) => {
-    try {
-      const patient = await axios.get(`/api/user/${CPF}`);
-      setEdit(patient.data.data);
-      setInput(patient.data.data?.report);
-      setShowModal(!showModal);
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
-  };
-
   const handleChecked = async (event, CPF) => {
     const { checked: isDone } = event.target;
-
+    setCheck(!check);
     try {
-      const patient = await axios.get(`/api/user/${CPF}`);
-      await axios.put(`/api/user/${CPF}`, { ...patient.data.data, isDone });
+      await axios.put(`/api/user/${CPF}`, { ...edit, isDone });
     } catch (error) {
       toast.error(error.response.data.message);
     }
   };
 
-  const calcAge = (value) => Math.floor((Date.now() - value) / 31536000000);
+  useEffect((CPF) => {
+    fetchAgenda();
+    fetchUser(CPF);
+  }, []);
+
+  const handleEdit = async (CPF) => {
+    fetchUser(CPF);
+    setShowModal(!showModal);
+  };
 
   return (
     <>
@@ -119,11 +124,11 @@ function agendaList() {
             <Form.Label>Status do Atendimento:</Form.Label>
             <br />
             <input
-              type="checkbox"
-              checked={edit?.isDone}
+              checked={check}
               onChange={(event) => handleChecked(event, edit?.CPF)}
+              type="checkbox"
             />
-            <span>{edit?.isDone ? ' realizado' : ' não realizado'}</span>
+            <span>{check ? ' realizado' : ' não realizado'}</span>
             <br />
             <Form.Label>Observações sobre o Atendimento:</Form.Label>
             <Form.Control
