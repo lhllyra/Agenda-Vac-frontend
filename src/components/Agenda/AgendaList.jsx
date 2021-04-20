@@ -35,6 +35,11 @@ function agendaList() {
     }
   };
 
+  useEffect((CPF) => {
+    fetchAgenda();
+    fetchUser(CPF);
+  }, []);
+
   const onEdit = async (CPF, report) => {
     try {
       await axios.put(`/api/user/${CPF}`, { ...edit, report });
@@ -54,11 +59,6 @@ function agendaList() {
       toast.error(error.response.data.message);
     }
   };
-
-  useEffect((CPF) => {
-    fetchAgenda();
-    fetchUser(CPF);
-  }, []);
 
   const handleEdit = async (CPF) => {
     fetchUser(CPF);
