@@ -9,7 +9,13 @@ import axios from '../../utils/api';
 function agendaList() {
   const [agenda = [], setAgenda] = useState([]);
   const [input, setInput] = useState('');
-  const [edit, setEdit] = useState({});
+  const [edit, setEdit] = useState({
+    name: '',
+    _id: '',
+    isDone: false,
+    birthDate: 0,
+    report: '',
+  });
   const [check, setCheck] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -29,22 +35,22 @@ function agendaList() {
       const patient = await axios.get(`/api/user/${CPF}`);
       setEdit(patient.data.data);
       setInput(patient.data.data?.report);
+      console.log(patient.data.data?.report);
       setCheck(patient.data.data?.isDone);
     } catch (error) {
       toast.error(error.response.data.message);
     }
   };
 
-  useEffect((CPF) => {
+  useEffect(() => {
     fetchAgenda();
-    fetchUser(CPF);
   }, []);
 
   const onEdit = async (CPF, report) => {
     try {
-      await axios.put(`/api/user/${CPF}`, { ...edit, report });
+      await axios.put(`/api/user/${CPF}`, { ...edit, report, isDone: check });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.message);
     }
     setShowModal(!showModal);
     setInput('');
@@ -56,7 +62,7 @@ function agendaList() {
     try {
       await axios.put(`/api/user/${CPF}`, { ...edit, isDone });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.message);
     }
   };
 
